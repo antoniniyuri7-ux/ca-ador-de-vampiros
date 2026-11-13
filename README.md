@@ -4,10 +4,10 @@ Projeto avaliativo de Pensamento Computacional, desenvolvido em Python com Pygam
 
 ## Desenvolvedores
 
-- **[Nome completo do integrante 1]** — RA: [preencher]
-- **[Nome completo do integrante 2]** — RA: [preencher]
+- **Yuri Antonini** — RA: **1140227**
+- **Mateus Zilio** — RA: **pendente de confirmação**
 
-> Substitua os campos entre colchetes pelos nomes completos e RAs da dupla antes da entrega.
+> Confirmar o RA do Mateus antes da entrega.
 
 ## História
 
@@ -48,7 +48,7 @@ O jogo pede o nome do jogador no terminal antes de abrir a janela.
 ## Estrutura do projeto
 
 - `main.py`: código principal
-- `bases/`: imagens, sons e ícones
+- `bases/`: imagens, sons, ícones e fonte do jogo
 - `Recursos/trabalho.py`: grava e consulta o recorde
 - `log.dat`: histórico criado ao terminar uma partida
 
@@ -57,3 +57,5 @@ O jogo pede o nome do jogador no terminal antes de abrir a janela.
 ```bash
 python setup.py build
 ```
+
+No Windows e Python 3.14, o executável fica em `build/exe.win-amd64-3.14/CacadorDeVampiros.exe`.

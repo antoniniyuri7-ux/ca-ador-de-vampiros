@@ -16,5 +16,5 @@ X: iniciar ou tentar novamente.
 ESC: fechar o jogo.
 
 PASTA BASES
-Imagens, sons e icones ficam organizados em bases/.
+Imagens, sons, icones e fonte ficam organizados em bases/.
 As funcoes de pontuacao ficam em Recursos/trabalho.py.

@@ -77,10 +77,10 @@ CAPA_MORTE, POS_MORTE = imagem_capa("tela_morte.png")
 CACADOR = imagem("cacador.png", (220, 160))
 VAMPIRO = imagem("vampiro.png", (220, 155))
 FLECHA = imagem("flecha.png", (82, 21))
-FONT_MENU = pygame.font.SysFont("comicsans", 23)
-FONT_MED = pygame.font.SysFont("comicsans", 28, bold=True)
-FONT_BIG = pygame.font.SysFont("comicsans", 54, bold=True)
-FONT_SMALL = pygame.font.SysFont("comicsans", 15)
+FONT_MENU = pygame.font.Font(os.path.join(BASES, "freesansbold.ttf"), 23)
+FONT_MED = pygame.font.Font(os.path.join(BASES, "freesansbold.ttf"), 28)
+FONT_BIG = pygame.font.Font(os.path.join(BASES, "freesansbold.ttf"), 54)
+FONT_SMALL = pygame.font.Font(os.path.join(BASES, "freesansbold.ttf"), 15)
 
 
 def carregar_som(nome):
