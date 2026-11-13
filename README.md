@@ -41,7 +41,7 @@ O jogo pede o nome do jogador no terminal antes de abrir a janela.
 - **R:** recarregar até cinco flechas
 - **ESPAÇO:** pausar ou continuar
 - **X:** iniciar a partida ou tentar novamente
-- **ESC:** fechar o jogo
+- **X da janela:** fechar o jogo
 
 ## Estrutura do projeto
 

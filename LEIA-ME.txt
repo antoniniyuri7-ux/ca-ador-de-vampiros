@@ -13,7 +13,7 @@ CTRL: disparar uma flecha.
 R: recarregar ate 5 flechas.
 ESPACO: pausar ou continuar.
 X: iniciar ou tentar novamente.
-ESC: fechar o jogo.
+X da janela: fechar o jogo.
 
 PASTA BASES
 Imagens, sons, icones e fonte ficam organizados em bases/.

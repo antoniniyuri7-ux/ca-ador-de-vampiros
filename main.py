@@ -168,8 +168,6 @@ def tela_inicial(nome):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 encerrar()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                encerrar()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_x:
                 return
             if evento.type == pygame.MOUSEBUTTONUP and botaoIniciar.collidepoint(evento.pos):
@@ -237,8 +235,6 @@ def jogar(nome):
             if evento.type == pygame.QUIT:
                 encerrar()
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    encerrar()
                 if evento.key == pygame.K_SPACE:
                     pausado = not pausado
                     if pausado:
@@ -347,8 +343,6 @@ def tela_morte(nome, pontos):
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                encerrar()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                 encerrar()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_x:
                 return True
