@@ -4,10 +4,8 @@ Projeto avaliativo de Pensamento Computacional, desenvolvido em Python com Pygam
 
 ## Desenvolvedores
 
-- **Yuri Antonini** — RA: **1140227**
-- **Mateus Zilio** — RA: **pendente de confirmação**
-
-> Confirmar o RA do Mateus antes da entrega.
+- **Yuri Antonini** — RA: **1140227** — GitHub: [@antoniniyuri7-ux](https://github.com/antoniniyuri7-ux)
+- **Mateus Zilio** — RA: **1139455** — GitHub: [@mateuszilio225](https://github.com/mateuszilio225)
 
 ## História
 
