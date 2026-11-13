@@ -20,7 +20,7 @@ def ler_recorde(caminho):
     except FileNotFoundError:
         return "Ainda não há partidas"
 
-    maior_nome = None
+    maior_nome = ""
     maior_pontos = -1
     maior_data = ""
     maior_hora = ""
@@ -42,6 +42,6 @@ def ler_recorde(caminho):
                 maior_hora = hora
     arquivo.close()
 
-    if maior_nome is None:
+    if maior_nome == "":
         return "Ainda não há partidas"
     return maior_nome + " - " + str(maior_pontos) + " pontos (" + maior_data + " " + maior_hora + ")"

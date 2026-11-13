@@ -1,10 +1,10 @@
-# Instale com: pip install pygame pyttsx3 cx_Freeze
+# Instale com: python -m pip install pygame pyttsx3 cx_Freeze
 import cx_Freeze
 
 executaveis = [
     cx_Freeze.Executable(
         script="main.py",
-        icon="assets/icone.ico",
+        icon="bases/icone.ico",
         target_name="CacadorDeVampiros.exe"
     )
 ]
@@ -14,7 +14,7 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "packages": ["pygame", "pyttsx3", "Recursos"],
-            "include_files": ["assets"]
+            "include_files": ["bases"]
         }
     },
     executables=executaveis

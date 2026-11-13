@@ -10,7 +10,7 @@ from Recursos.trabalho import ler_recorde, salvar_partida
 try:
     import pyttsx3
 except ImportError:
-    pyttsx3 = None
+    pyttsx3 = False
 
 
 def pedir_nome_antes_de_abrir_jogo():
@@ -30,7 +30,7 @@ NOME_JOGADOR = pedir_nome_antes_de_abrir_jogo()
 
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-ASSETS = os.path.join(BASE, "assets")
+BASES = os.path.join(BASE, "bases")
 LARGURA, ALTURA = 1000, 700
 # O cenário original tem 563 px de altura; o espaço inferior será o HUD.
 AREA_JOGO = 563
@@ -49,20 +49,22 @@ except pygame.error:
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Caçador de Vampiros")
 try:
-    pygame.display.set_icon(pygame.image.load(os.path.join(ASSETS, "icone.png")))
+    pygame.display.set_icon(pygame.image.load(os.path.join(BASES, "icone.png")))
 except (pygame.error, FileNotFoundError):
     pass
 relogio = pygame.time.Clock()
 
 
-def imagem(nome, tamanho=None):
-    img = pygame.image.load(os.path.join(ASSETS, nome)).convert_alpha()
-    return pygame.transform.smoothscale(img, tamanho) if tamanho else img
+def imagem(nome, tamanho=False):
+    img = pygame.image.load(os.path.join(BASES, nome)).convert_alpha()
+    if tamanho != False:
+        img = pygame.transform.smoothscale(img, tamanho)
+    return img
 
 
 def imagem_capa(nome):
     """Preserva a proporção da arte original e centraliza na tela 1000×700."""
-    img = pygame.image.load(os.path.join(ASSETS, nome)).convert()
+    img = pygame.image.load(os.path.join(BASES, nome)).convert()
     largura = LARGURA
     altura = round(img.get_height() * largura / img.get_width())
     img = pygame.transform.smoothscale(img, (largura, altura))
@@ -83,16 +85,16 @@ FONT_SMALL = pygame.font.SysFont("comicsans", 15)
 
 def carregar_som(nome):
     try:
-        return pygame.mixer.Sound(os.path.join(ASSETS, nome))
+        return pygame.mixer.Sound(os.path.join(BASES, nome))
     except (pygame.error, FileNotFoundError):
-        return None
+        return False
 
 
 SOM_TIRO = carregar_som("tiro_crossbow.mp3")
 SOM_RECARREGAR = carregar_som("recarregar_crossbow.mp3")
 SOM_MORTE = carregar_som("morte_cacador.mp3")
 try:
-    pygame.mixer.music.load(os.path.join(ASSETS, "som_vampiro.mp3"))
+    pygame.mixer.music.load(os.path.join(BASES, "som_vampiro.mp3"))
 except (pygame.error, FileNotFoundError):
     pass
 
@@ -104,7 +106,7 @@ def tocar(som):
 
 def falar_boas_vindas(nome):
     """Fala o nome do competidor usando a biblioteca pyttsx3."""
-    if pyttsx3 is None:
+    if pyttsx3 == False:
         return
     try:
         voz = pyttsx3.init()
@@ -129,12 +131,8 @@ def texto(texto_, fonte, cor=BRANCO):
     return fonte.render(texto_, True, cor)
 
 
-def caixas_menu_inicio():
-    # Coordenadas dos três botões já desenhados na capa original (arte 1000×562).
-    y0 = POS_INICIO[1]
-    return (pygame.Rect(350, y0 + 325, 300, 66),
-            pygame.Rect(350, y0 + 392, 300, 55),
-            pygame.Rect(350, y0 + 447, 300, 60))
+def caixa_botao_iniciar():
+    return pygame.Rect(410, 535, 180, 48)
 
 
 def caixas_morte():
@@ -144,34 +142,8 @@ def caixas_morte():
             pygame.Rect(320, y0 + 220, 360, 65))
 
 
-def tela_instrucoes(nome):
-    while True:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                encerrar()
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                encerrar()
-            if evento.type == pygame.MOUSEBUTTONUP or (evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_BACKSPACE)):
-                return
-
-        desenhar_capa(CAPA_INICIO, POS_INICIO)
-        painel = pygame.Surface((590, 300), pygame.SRCALPHA)
-        painel.fill((8, 5, 10, 228))
-        tela.blit(painel, (205, 185))
-        tela.blit(texto("Bem-vindo, " + nome, FONT_MED, VERMELHO), (245, 205))
-        linhas = ["Use as setas para mover o caçador (um eixo por vez).",
-                 "Pressione ESPAÇO para pausar ou continuar.",
-                 "Use CTRL para disparar; R recarrega até 5 flechas.",
-                 "Acerte os vampiros antes que alcancem você.",
-                 "Recorde: " + ler_recorde(LOG),
-                 "Clique ou pressione ENTER para voltar à capa inicial."]
-        for i, linha in enumerate(linhas):
-            tela.blit(texto(linha, FONT_MENU), (245, 250 + i * 35))
-        pygame.display.flip()
-        relogio.tick(FPS)
-
-
 def tela_inicial(nome):
+    botaoIniciar = caixa_botao_iniciar()
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -180,25 +152,24 @@ def tela_inicial(nome):
                 encerrar()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_x:
                 return
-            if evento.type == pygame.MOUSEBUTTONUP:
-                iniciar, instrucoes, sair = caixas_menu_inicio()
-                if iniciar.collidepoint(evento.pos):
-                    return
-                if instrucoes.collidepoint(evento.pos):
-                    tela_instrucoes(nome)
-                elif sair.collidepoint(evento.pos):
-                    encerrar()
+            if evento.type == pygame.MOUSEBUTTONUP and botaoIniciar.collidepoint(evento.pos):
+                return
 
         desenhar_capa(CAPA_INICIO, POS_INICIO)
-        # Informações solicitadas ficam numa faixa discreta, sem alterar a arte/botões.
-        faixa = pygame.Surface((260, 108), pygame.SRCALPHA)
-        faixa.fill((8, 5, 10, 205))
-        tela.blit(faixa, (720, 430))
-        tela.blit(texto("Olá, " + nome[:22], FONT_SMALL), (734, 442))
-        tela.blit(texto("Acerte vampiros; sobreviva!", FONT_SMALL), (734, 465))
-        recorde = ler_recorde(LOG)
-        tela.blit(texto("Recorde: " + recorde[:25], FONT_SMALL), (734, 488))
-        tela.blit(texto("Pressione X para começar", FONT_SMALL), (24, 652))
+        # O painel esconde os botões desenhados na capa e deixa só o botão inicial.
+        painel = pygame.Surface((620, 270), pygame.SRCALPHA)
+        painel.fill((8, 5, 10, 238))
+        tela.blit(painel, (190, 345))
+        pygame.draw.rect(tela, (150, 20, 30), (190, 345, 620, 270), 3)
+        tela.blit(texto("Bem-vindo, " + nome[:26], FONT_MED, VERMELHO), (230, 365))
+        tela.blit(texto("Mova o caçador com as setas e acerte os vampiros com CTRL.", FONT_SMALL), (230, 410))
+        tela.blit(texto("Sobreviva para marcar pontos. Recarregue com R.", FONT_SMALL), (230, 438))
+        tela.blit(texto("Recordista: " + ler_recorde(LOG), FONT_SMALL), (230, 474))
+        pygame.draw.rect(tela, (140, 15, 25), botaoIniciar, border_radius=8)
+        pygame.draw.rect(tela, (255, 180, 160), botaoIniciar, 2, border_radius=8)
+        legendaBotao = texto("INICIAR JOGO", FONT_MENU)
+        tela.blit(legendaBotao, legendaBotao.get_rect(center=botaoIniciar.center))
+        tela.blit(texto("Clique no botão ou pressione X para começar", FONT_SMALL), (230, 586))
         pygame.display.flip()
         relogio.tick(FPS)
 
@@ -224,7 +195,7 @@ def jogar(nome):
     posicaoXVampiro, posicaoYVampiro = 1010, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
     velocidadeVampiro = 2.4
     vx = vy = 0
-    eixo = None
+    eixo = ""
     flechas = 5
     projeteis = []
     pausado = False

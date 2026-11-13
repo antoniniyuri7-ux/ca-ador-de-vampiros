@@ -3,31 +3,18 @@ CACADOR DE VAMPIROS
 COMO EXECUTAR
 1. Instale Python 3.
 2. Abra o terminal nesta pasta.
-3. Instale as dependências: pip install pygame pyttsx3
+3. Instale as dependencias: python -m pip install pygame pyttsx3 cx_Freeze
 4. Execute: python main.py
-5. Informe o nome no terminal; a janela só abrirá depois disso.
-
-Na capa inicial, clique em “Iniciar Jogo” ou pressione X para começar.
-Na tela de morte, pressione X para tentar novamente.
+5. Informe o nome no terminal; a janela abre depois disso.
 
 CONTROLES
-Setas direcionais: movimentar o caçador em um eixo por vez.
+Setas: movimentar o cacador, um eixo por vez.
 CTRL: disparar uma flecha.
-R: recarregar até 5 flechas.
-ESPAÇO: pausar/continuar.
-ESC: fechar o jogo completamente.
+R: recarregar ate 5 flechas.
+ESPACO: pausar ou continuar.
+X: iniciar ou tentar novamente.
+ESC: fechar o jogo.
 
-OBJETIVO
-Acerte os vampiros antes que alcancem o caçador. Cada acerto soma pontos e
-aumenta gradualmente a velocidade dos vampiros. As colisões usam áreas menores
-no centro dos sprites para exigir que os personagens cheguem mais perto. Os
-personagens permanecem dentro do cenário; a faixa inferior da janela exibe o HUD.
-
-PLACAR
-As partidas são registradas em log.dat com nome, pontuação, data e hora.
-O recordista aparece na tela inicial, nas instruções e na tela de morte.
-
-ARQUIVOS
-Recursos/trabalho.py contém as funções de registro e leitura do recorde.
-Os arquivos originais de imagens e sons ficam em assets/.
-O pyttsx3 anuncia a mensagem de boas-vindas quando a biblioteca está instalada.
+PASTA BASES
+Imagens, sons e icones ficam organizados em bases/.
+As funcoes de pontuacao ficam em Recursos/trabalho.py.
