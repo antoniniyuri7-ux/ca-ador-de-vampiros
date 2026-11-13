@@ -44,13 +44,20 @@ LOG = os.path.join(BASE, "log.dat")
 # Mostra a janela de carregamento antes de buscar as imagens e os sons.
 pygame.display.init()
 pygame.font.init()
+pygame.event.init()
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Caçador de Vampiros")
+# Usa a capa original durante o carregamento, para a janela já parecer o jogo.
+CAPA_INICIO = pygame.image.load(os.path.join(BASES, "tela_inicio.png")).convert()
+alturaCapa = round(CAPA_INICIO.get_height() * LARGURA / CAPA_INICIO.get_width())
+CAPA_INICIO = pygame.transform.smoothscale(CAPA_INICIO, (LARGURA, alturaCapa))
+POS_INICIO = (0, (ALTURA - alturaCapa) // 2)
 tela.fill(PRETO)
-mensagemCarregamento = pygame.font.Font(None, 34).render(
-    "Carregando o jogo...", True, BRANCO
+tela.blit(CAPA_INICIO, POS_INICIO)
+mensagemCarregamento = pygame.font.Font(None, 30).render(
+    "Carregando...", True, BRANCO
 )
-tela.blit(mensagemCarregamento, mensagemCarregamento.get_rect(center=(LARGURA // 2, ALTURA // 2)))
+tela.blit(mensagemCarregamento, mensagemCarregamento.get_rect(center=(LARGURA // 2, ALTURA - 32)))
 pygame.display.flip()
 
 try:
@@ -82,7 +89,6 @@ def imagem_capa(nome):
 
 
 FUNDO, _ = imagem_capa("fundo_jogo.png")
-CAPA_INICIO, POS_INICIO = imagem_capa("tela_inicio.png")
 CAPA_MORTE, POS_MORTE = imagem_capa("tela_morte.png")
 CACADOR = imagem("cacador.png", (220, 160))
 VAMPIRO = imagem("vampiro.png", (220, 155))
