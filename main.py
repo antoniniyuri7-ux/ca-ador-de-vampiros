@@ -220,9 +220,9 @@ def criar_decoracao():
 
 def jogar(nome):
     pontos = 0
-    x_c, y_c = 35, 290
-    x_v, y_v = 1010, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
-    velocidade_v = 2.4
+    posicaoXCacador, posicaoYCacador = 35, 290
+    posicaoXVampiro, posicaoYVampiro = 1010, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
+    velocidadeVampiro = 2.4
     vx = vy = 0
     eixo = None
     flechas = 5
@@ -259,7 +259,7 @@ def jogar(nome):
                     vy = -5 if evento.key == pygame.K_UP else 5
                 elif evento.key == pygame.K_LCTRL or evento.key == pygame.K_RCTRL:
                     if flechas > 0:
-                        projeteis.append(pygame.Rect(x_c + 170, y_c + 72, 82, 21))
+                        projeteis.append(pygame.Rect(posicaoXCacador + 170, posicaoYCacador + 72, 82, 21))
                         flechas -= 1
                         tocar(SOM_TIRO)
                 elif evento.key == pygame.K_r and flechas < 5:
@@ -282,9 +282,9 @@ def jogar(nome):
                 if tamanhoBola <= 30:
                     aumentarBola = True
 
-            x_c = max(0, min(LARGURA - CACADOR.get_width(), x_c + vx))
-            y_c = max(34, min(AREA_JOGO - CACADOR.get_height() - 10, y_c + vy))
-            x_v -= velocidade_v
+            posicaoXCacador = max(0, min(LARGURA - CACADOR.get_width(), posicaoXCacador + vx))
+            posicaoYCacador = max(34, min(AREA_JOGO - CACADOR.get_height() - 10, posicaoYCacador + vy))
+            posicaoXVampiro -= velocidadeVampiro
             for i in range(len(decoracaoX)):
                 decoracaoX[i] = decoracaoX[i] + movimentoX[i]
                 decoracaoY[i] = decoracaoY[i] + movimentoY[i]
@@ -293,8 +293,8 @@ def jogar(nome):
                 if decoracaoY[i] < 40 or decoracaoY[i] > AREA_JOGO - 20:
                     movimentoY[i] = movimentoY[i] * -1
 
-            vampiro_corpo = pygame.Rect(x_v + 63, y_v + 39, 110, 89)
-            hunter_corpo = pygame.Rect(x_c + 65, y_c + 47, 112, 82)
+            vampiro_corpo = pygame.Rect(posicaoXVampiro + 63, posicaoYVampiro + 39, 110, 89)
+            hunter_corpo = pygame.Rect(posicaoXCacador + 65, posicaoYCacador + 47, 112, 82)
             flecha_acertou = False
             for seta in projeteis[:]:
                 seta.x += 11
@@ -303,13 +303,13 @@ def jogar(nome):
                 elif seta.colliderect(vampiro_corpo):
                     projeteis.remove(seta)
                     pontos += 1
-                    velocidade_v = min(6.5, velocidade_v + 0.25)
-                    x_v, y_v = LARGURA + 10, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
+                    velocidadeVampiro = min(6.5, velocidadeVampiro + 0.25)
+                    posicaoXVampiro, posicaoYVampiro = LARGURA + 10, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
                     flecha_acertou = True
                     break
 
-            if x_v < -VAMPIRO.get_width():
-                x_v, y_v = LARGURA + 10, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
+            if posicaoXVampiro < -VAMPIRO.get_width():
+                posicaoXVampiro, posicaoYVampiro = LARGURA + 10, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
             if not flecha_acertou and vampiro_corpo.colliderect(hunter_corpo):
                 pygame.mixer.music.stop()
                 salvar_partida(LOG, nome, pontos)
@@ -329,8 +329,8 @@ def jogar(nome):
         for i in range(len(decoracaoX)):
             pygame.draw.circle(tela, (160, 70, 83),
                                (decoracaoX[i], decoracaoY[i]), tamanhoDecoracao[i])
-        tela.blit(CACADOR, (x_c, y_c))
-        tela.blit(VAMPIRO, (x_v, y_v))
+        tela.blit(CACADOR, (posicaoXCacador, posicaoYCacador))
+        tela.blit(VAMPIRO, (posicaoXVampiro, posicaoYVampiro))
         for seta in projeteis:
             tela.blit(FLECHA, seta)
 
