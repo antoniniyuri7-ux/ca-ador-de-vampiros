@@ -3,6 +3,7 @@
 import random
 import sys
 import os
+import threading
 
 import pygame
 from Recursos.trabalho import ler_recorde, salvar_partida
@@ -40,14 +41,23 @@ VERMELHO = (220, 25, 35)
 PRETO = (8, 6, 12)
 LOG = os.path.join(BASE, "log.dat")
 
-pygame.init()
+# Mostra a janela de carregamento antes de buscar as imagens e os sons.
+pygame.display.init()
+pygame.font.init()
+tela = pygame.display.set_mode((LARGURA, ALTURA))
+pygame.display.set_caption("Caçador de Vampiros")
+tela.fill(PRETO)
+mensagemCarregamento = pygame.font.Font(None, 34).render(
+    "Carregando o jogo...", True, BRANCO
+)
+tela.blit(mensagemCarregamento, mensagemCarregamento.get_rect(center=(LARGURA // 2, ALTURA // 2)))
+pygame.display.flip()
+
 try:
     pygame.mixer.init()
 except pygame.error:
     pass
 
-tela = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("Caçador de Vampiros")
 try:
     pygame.display.set_icon(pygame.image.load(os.path.join(BASES, "icone.png")))
 except (pygame.error, FileNotFoundError):
@@ -117,6 +127,9 @@ def falar_boas_vindas(nome):
         pass
 
 
+voz_iniciada = False
+
+
 def encerrar():
     pygame.quit()
     sys.exit()
@@ -143,6 +156,7 @@ def caixas_morte():
 
 
 def tela_inicial(nome):
+    global voz_iniciada
     botaoIniciar = caixa_botao_iniciar()
     while True:
         for evento in pygame.event.get():
@@ -171,6 +185,10 @@ def tela_inicial(nome):
         tela.blit(legendaBotao, legendaBotao.get_rect(center=botaoIniciar.center))
         tela.blit(texto("Clique no botão ou pressione X para começar", FONT_SMALL), (230, 586))
         pygame.display.flip()
+        # Inicia a fala só depois que a tela de boas-vindas já apareceu.
+        if not voz_iniciada:
+            threading.Thread(target=falar_boas_vindas, args=(nome,), daemon=True).start()
+            voz_iniciada = True
         relogio.tick(FPS)
 
 
@@ -348,7 +366,6 @@ def tela_morte(nome, pontos):
 
 def main():
     nome = NOME_JOGADOR
-    falar_boas_vindas(nome)
     while True:
         tela_inicial(nome)
         while True:
