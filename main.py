@@ -215,7 +215,7 @@ def jogar(nome):
     pontos = 0
     posicaoXCacador, posicaoYCacador = 35, 290
     posicaoXVampiro, posicaoYVampiro = 1010, random.randint(45, AREA_JOGO - VAMPIRO.get_height() - 10)
-    velocidadeVampiro = 2.4
+    velocidadeVampiro = 2.2
     vx = vy = 0
     eixo = ""
     flechas = 5
