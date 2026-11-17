@@ -44,7 +44,6 @@ LOG = os.path.join(BASE, "log.dat")
 # Mostra a janela de carregamento antes de buscar as imagens e os sons.
 pygame.display.init()
 pygame.font.init()
-pygame.event.init()
 tela = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Caçador de Vampiros")
 # Usa a capa original durante o carregamento, para a janela já parecer o jogo.
